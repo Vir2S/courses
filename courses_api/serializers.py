@@ -28,5 +28,5 @@ class StudentSerializer(serializers.ModelSerializer):
 
 class CourseParticipantSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Course
-        fields = ['name', 'students_count']
+        model = CourseParticipant
+        fields = ['course', 'student']

@@ -6,6 +6,7 @@ from courses_api.serializers import CourseSerializer, StudentSerializer
 from django.views.decorators.csrf import csrf_exempt
 
 
+@csrf_exempt
 def courses_list(request):
 
     if request.method == 'GET':

@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import generics, mixins
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 # Generic API Views
@@ -24,14 +26,17 @@ class GenericAPIView(generics.GenericAPIView,
 
     lookup_field = 'id'
 
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = IsAuthenticated
+
     def get(self, request, id=None):
         if id:
             return self.retrieve(request, id)
         else:
             return self.list(request)
 
-    def post(self, request):
-        return self.create(request)
+    # def post(self, request):
+    #     return self.create(request)
 
     def put(self, request, id=None):
         return self.update(request, id)

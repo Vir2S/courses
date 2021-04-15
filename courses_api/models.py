@@ -24,7 +24,13 @@ class CourseParticipant(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     complete = models.BooleanField(default=False)
+    count = 0
 
     def __str__(self):
-        return '%s %s' % (self.course, self.student)
+        return '%s %s %s' % (self.course, self.student, self.student_count(self.count))
 
+    def student_count(self, count):
+        course = CourseParticipant.objects.all()
+        if self.student in course:
+            count += 1
+        return count

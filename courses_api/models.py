@@ -10,7 +10,12 @@ class Course(models.Model):
     students = models.ManyToManyField('Student', related_name='courses')
 
     def __str__(self):
-        return self.name
+        return '%s %s' % (self.name, self.student_count(pk=self.id))
+
+    def student_count(self, pk):
+        course = Course.objects.get(pk=pk)
+        counter = course.students.count()
+        return counter
 
 
 class Student(models.Model):
@@ -34,4 +39,4 @@ class CourseParticipant(models.Model):
         )
 
     def __str__(self):
-        return '%s %s' % (self.course, self.student)
+        return '%s %s %s' % (self.course, self.student, self.complete)

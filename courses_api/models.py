@@ -13,9 +13,7 @@ class Course(models.Model):
         return '%s %s' % (self.name, self.student_count(pk=self.id))
 
     def student_count(self, pk):
-        course = Course.objects.get(pk=pk)
-        counter = course.students.count()
-        return counter
+        return Course.objects.filter(pk=pk).aggregate(models.Count('students'))
 
 
 class Student(models.Model):

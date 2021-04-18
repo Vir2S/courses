@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Course, Student, CourseParticipant
+from courses_api.models import Course, Student, CourseParticipant
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -25,6 +25,9 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ['id', 'name', 'start_date', 'end_date', 'students']
+
+    def students_count(self):
+        return Course.objects.get('students_count')
 
 
 class StudentSerializer(serializers.ModelSerializer):

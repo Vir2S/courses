@@ -13,39 +13,6 @@ from rest_framework.authentication import TokenAuthentication, SessionAuthentica
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
-# Generic API Views
-class GenericAPIView(generics.GenericAPIView,
-                     mixins.ListModelMixin,
-                     mixins.CreateModelMixin,
-                     mixins.UpdateModelMixin,
-                     mixins.RetrieveModelMixin,
-                     mixins.DestroyModelMixin):
-
-    serializer_class = CourseSerializer
-    queryset = Course.objects.all()
-
-    lookup_field = 'id'
-
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [AllowAny]
-
-    def get(self, request, id=None):
-        if id:
-            return self.retrieve(request, id)
-        else:
-            return self.list(request)
-
-    # def post(self, request):
-    #     return self.create(request)
-
-    def put(self, request, id=None):
-        return self.update(request, id)
-
-    def delete(self, request, id):
-        return self.destroy(request, id)
-
-
 # Class-Based Views
 class CourseAPIView(APIView):
 

@@ -7,6 +7,8 @@ class Course(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
+    students = models.ManyToManyField('Student', related_name='courses')
+
     def __str__(self):
         return self.name
 
@@ -21,10 +23,9 @@ class Student(models.Model):
 
 
 class CourseParticipant(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, db_index=False)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, db_index=False)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, db_index=False, related_name='course')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, db_index=False, related_name='student')
     complete = models.BooleanField(default=False)
-    count = 0
 
     class Meta:
         unique_together = (

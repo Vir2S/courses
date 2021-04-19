@@ -1,20 +1,19 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from rest_framework.parsers import JSONParser
+from django.http import HttpResponse
 from courses_api.models import Course, Student, CourseParticipant
 from courses_api.serializers import CourseSerializer, StudentSerializer, CourseParticipantSerializer
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework import generics, mixins
+# from rest_framework import generics, mixins
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 # Class-Based Views
-class CourseAPIView(APIView):
+class CoursesAPIView(APIView):
 
     def get(self, request):
         courses = Course.objects.all()

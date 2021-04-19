@@ -24,7 +24,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'start_date', 'end_date', 'students']
+        fields = ['id', 'name', 'description', 'start_date', 'end_date', 'students']
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -36,4 +36,4 @@ class StudentSerializer(serializers.ModelSerializer):
 class CourseParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseParticipant
-        fields = ['id', 'course']
+        fields = ['id', 'course', 'student']

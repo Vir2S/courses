@@ -7,7 +7,7 @@ class Course(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
-    students = models.ManyToManyField('Student', related_name='courses')
+    students = models.ManyToManyField('Student', related_name='courses', blank=True)
 
     def __str__(self):
         return '%s %s' % (self.name, self.student_count())

@@ -6,6 +6,7 @@ class Course(models.Model):
     description = models.CharField(max_length=1000)
     start_date = models.DateField()
     end_date = models.DateField()
+    lectures = models.IntegerField(default=0)
 
     students = models.ManyToManyField('Student', related_name='courses', blank=True)
 

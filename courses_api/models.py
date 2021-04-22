@@ -9,11 +9,11 @@ class Course(models.Model):
 
     students = models.ManyToManyField('Student', related_name='courses', blank=True)
 
-    def __str__(self):
-        return '%s %s' % (self.name, self.student_count())
+    class Meta:
+        ordering = ('id', )
 
-    def student_count(self):
-        return Course.objects.filter(pk=self.id).aggregate(models.Count('students'))
+    def __str__(self):
+        return '%s %s' % (self.id, self.name)
 
 
 class Student(models.Model):

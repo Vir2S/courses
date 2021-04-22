@@ -13,10 +13,7 @@ class Course(models.Model):
         ordering = ('id', )
 
     def __str__(self):
-        return '%s %s' % (self.name, self.student_count())
-
-    def student_count(self):
-        return Course.objects.filter(pk=self.id).aggregate(models.Count('students'))
+        return '%s %s' % (self.id, self.name)
 
 
 class Student(models.Model):

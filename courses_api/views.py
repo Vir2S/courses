@@ -16,8 +16,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 # Class-Based Views
 class CoursesAPIView(APIView):
-    # search_fields = ['^course']
-    # filter_backends = [filters.SearchFilter, ]
 
     def get(self, request):
         courses = Course.objects.all()

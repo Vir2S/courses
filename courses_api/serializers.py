@@ -5,7 +5,7 @@ from courses_api.models import Course, Student
 class CoursesListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = '__all__'
+        fields = ['id', 'name']
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):

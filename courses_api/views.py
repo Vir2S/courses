@@ -7,10 +7,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework import filters
-from rest_framework import generics, mixins
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
+# from rest_framework import filters
+# from rest_framework import generics, mixins
+# from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
+# from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 # Class-Based Views
@@ -18,13 +18,21 @@ class CoursesAPIView(APIView):
 
     def get(self, request):
         courses = Course.objects.all()
+        start_date = self.request.GET.getlist('start_date')
+        end_date = self.request.GET.getlist('end_date')
+
+        if start_date:
+            courses = courses.filter(start_date__in=start_date)
+
+        if end_date:
+            courses = courses.filter(end_date__in=end_date)
 
         query = self.request.GET.get('q')
+
         if query:
             courses = courses.filter(Q(name__contains=query))
 
         serializer = CoursesListSerializer(courses, many=True)
-
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -37,13 +45,6 @@ class CoursesAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class CoursesAPIView(generics.ListCreateAPIView):
-#     queryset = Course.objects.all()
-#     serializer_class = CoursesListSerializer
-#     search_fields = ['name']
-#     filter_backends = [filters.SearchFilter, ]
-
-
 class CourseDetailAPIView(APIView):
 
     def get_object(self, id):
@@ -53,9 +54,12 @@ class CourseDetailAPIView(APIView):
             return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request, id):
-        course = self.get_object(id)
-        serializer = CourseDetailSerializer(course)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            course = self.get_object(id=id)
+            serializer = CourseDetailSerializer(course)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, id):
         course = self.get_object(id)
@@ -74,44 +78,44 @@ class CourseDetailAPIView(APIView):
 
 
 # Functional Views
-@api_view(['GET', 'POST'])
-def courses_list(request):
-
-    if request.method == 'GET':
-        courses = Course.objects.all()
-        serializer = CoursesListSerializer(courses, many=True)
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        serializer = CoursesListSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def course_detail(request, pk):
-    try:
-        course = Course.objects.get(pk=pk)
-    except Course.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = CourseDetailSerializer(course)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = CourseDetailSerializer(course, data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        course.delete()
-        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+# @api_view(['GET', 'POST'])
+# def courses_list(request):
+#
+#     if request.method == 'GET':
+#         courses = Course.objects.all()
+#         serializer = CoursesListSerializer(courses, many=True)
+#         return Response(serializer.data)
+#
+#     elif request.method == 'POST':
+#         serializer = CoursesListSerializer(data=request.data)
+#
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#
+# @api_view(['GET', 'PUT', 'DELETE'])
+# def course_detail(request, pk):
+#     try:
+#         course = Course.objects.get(pk=pk)
+#     except Course.DoesNotExist:
+#         return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+#
+#     if request.method == 'GET':
+#         serializer = CourseDetailSerializer(course)
+#         return Response(serializer.data)
+#
+#     elif request.method == 'PUT':
+#         serializer = CourseDetailSerializer(course, data=request.data)
+#
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     elif request.method == 'DELETE':
+#         course.delete()
+#         return HttpResponse(status=status.HTTP_204_NO_CONTENT)

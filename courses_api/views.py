@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.http import HttpResponse
 from courses_api.models import Course, Student
 from django.db.models import Q
@@ -41,11 +40,11 @@ class CoursesAPIView(APIView):
 # class CoursesAPIView(generics.ListCreateAPIView):
 #     queryset = Course.objects.all()
 #     serializer_class = CoursesListSerializer
-#     search_fields = ['course']
+#     search_fields = ['name']
 #     filter_backends = [filters.SearchFilter, ]
 
 
-class CourseDetailsAPIView(APIView):
+class CourseDetailAPIView(APIView):
 
     def get_object(self, id):
         try:

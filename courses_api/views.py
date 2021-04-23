@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from courses_api.models import Course, Student
+from django.db.models import Q
 from courses_api.serializers import CoursesListSerializer, CourseDetailSerializer, StudentSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework import filters
 from rest_framework import generics, mixins
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -14,10 +16,18 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 # Class-Based Views
 class CoursesAPIView(APIView):
+    # search_fields = ['^course']
+    # filter_backends = [filters.SearchFilter, ]
 
     def get(self, request):
         courses = Course.objects.all()
+
+        query = self.request.GET.get('q')
+        if query:
+            courses = courses.filter(Q(name__contains=query))
+
         serializer = CoursesListSerializer(courses, many=True)
+
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -28,6 +38,13 @@ class CoursesAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class CoursesAPIView(generics.ListCreateAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = CoursesListSerializer
+#     search_fields = ['course']
+#     filter_backends = [filters.SearchFilter, ]
 
 
 class CourseDetailsAPIView(APIView):

@@ -14,7 +14,7 @@ class Course(models.Model):
         ordering = ('id', )
 
     def __str__(self):
-        return '%s %s' % (self.id, self.name)
+        return self.name
 
 
 class Student(models.Model):
@@ -24,18 +24,3 @@ class Student(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
-
-
-# class CourseParticipant(models.Model):
-#     course = models.ForeignKey(Course, on_delete=models.CASCADE, db_index=False, related_name='course')
-#     student = models.ForeignKey(Student, on_delete=models.CASCADE, db_index=False, related_name='student')
-#     complete = models.BooleanField(default=False)
-#
-#     class Meta:
-#         unique_together = (
-#             'course',
-#             'student',
-#         )
-#
-#     def __str__(self):
-#         return '%s %s %s' % (self.course, self.student, self.complete)

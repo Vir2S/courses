@@ -23,4 +23,4 @@ class Student(models.Model):
     email = models.EmailField(max_length=150, unique=True)
 
     def __str__(self):
-        return '%s %s' % (self.first_name, self.last_name)
+        return f'{self.first_name} {self.last_name}'

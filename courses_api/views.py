@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from courses_api.models import Course, Student
 from django.db.models import Q
 from courses_api.serializers import CoursesListSerializer, CourseDetailSerializer, StudentSerializer
@@ -7,7 +6,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-# from rest_framework import filters
 # from rest_framework import generics, mixins
 # from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
 # from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -47,22 +45,22 @@ class CoursesAPIView(APIView):
 
 class CourseDetailAPIView(APIView):
 
-    def get_object(self, id):
+    def get_object(self, pk):
         try:
-            return Course.objects.get(id=id)
+            return Course.objects.get(pk=pk)
         except Course.DoesNotExist:
-            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def get(self, request, id):
+    def get(self, request, pk):
         try:
-            course = self.get_object(id=id)
+            course = self.get_object(pk=pk)
             serializer = CourseDetailSerializer(course)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def put(self, request, id):
-        course = self.get_object(id)
+    def put(self, request, pk):
+        course = self.get_object(pk)
         serializer = CourseDetailSerializer(course, data=request.data)
 
         if serializer.is_valid():
@@ -71,8 +69,8 @@ class CourseDetailAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, id):
-        course = self.get_object(id)
+    def delete(self, request, pk):
+        course = self.get_object(pk)
         course.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

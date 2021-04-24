@@ -56,7 +56,7 @@ class CourseDetailAPIView(APIView):
             course = self.get_object(pk=pk)
             serializer = CourseDetailSerializer(course)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
+        except Course.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk):
